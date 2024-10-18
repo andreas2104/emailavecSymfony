@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Courriers{% endblock %}
+
+{% block body %}
+    <h1>Liste des Courriers</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Expéditeur</th>  {# Affichage de l'expéditeur #}
+                <th>Destinataire(s)</th>  {# Affichage des destinataires #}
+                <th>Objet</th>
+                 <th>message</th>
+                  <th>piece_jointe</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for courrier in courriers %}
+                <tr>
+                    <td>{{ courrier.id }}</td>
+                    <td>{{ courrier.expediteur.email }}</td>  {# Accès à l'email de l'expéditeur #}
+                    <td>
+                        {# Affichage des emails des destinataires #}
+                        {% for destinataire in courrier.destinataire %}
+                            {{ destinataire.email }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ courrier.objet }}</td>
+                    <td>{{ courrier.message }}</td>
+                    <td>{{ courrier.pieceJointe }}</td>
+                    <td>
+                        <a href="{{ path('app_courrier', {'id': courrier.id}) }}">Afficher</a>
+                        {# <a href="{{ path('courrier_edit', {'id': courrier.id}) }}">Modifier</a> #}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">Aucun courrier trouvé</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

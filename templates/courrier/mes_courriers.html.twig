@@ -1,0 +1,35 @@
+{# templates/courrier/mes_courriers.html.twig #}
+
+<h1>Mes courriers</h1>
+
+<h2>Courriers envoyés</h2>
+<ul>
+    {% for courrier in courriersEnvoyes %}
+        <li>
+            <strong>Destinataires :</strong> 
+            {% for destinataire in courrier.destinataire %}
+                {{ destinataire.email }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+            <br>
+            <strong>Objet :</strong> {{ courrier.objet }} <br>
+            <strong>Date d'envoi :</strong> {{ courrier.dateEnvoi|date('d/m/Y') }} <br>
+            <strong>Message :</strong> {{ courrier.message }}
+        </li>
+    {% else %}
+        <li>Aucun courrier envoyé</li>
+    {% endfor %}
+</ul>
+
+<h2>Courriers reçus</h2>
+<ul>
+    {% for courrier in courrierRecus %}
+        <li>
+            <strong>Expéditeur :</strong> {{ courrier.expediteur.email }} <br>
+            <strong>Objet :</strong> {{ courrier.objet }} <br>
+            <strong>Date d'envoi :</strong> {{ courrier.dateEnvoi|date('d/m/Y') }} <br>
+            <strong>Message :</strong> {{ courrier.message }}
+        </li>
+    {% else %}
+        <li>Aucun courrier reçu</li>
+    {% endfor %}
+</ul>
