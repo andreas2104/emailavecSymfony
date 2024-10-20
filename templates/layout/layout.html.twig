@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Mon site {% endblock %} </title>
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+	</head>
+  <body>
+  <div class = "twoside">
+    {# <div class = "layout">
+    <li><a href= " {{ path('app_courrier' )}} ">Courrier</a></li>
+    <li><a href= "/ouvrir courrier">A propos</a></li>
+  </div> #}
+    <header>
+      <nav>
+        <ul>
+          <li><a href= "/">Acceuil</a></li>
+          <li><a href= "/">A propos</a></li>
+          <li><a href= "/">Contact</a></li>
+        </ul>
+      </nav>
+    </header> 
+    </div>
+
+      <main>
+      {# <div class="colonne">
+      <ul >
+          <li><a href= " {{ path('app_courrier' )}} ">Courrier</a></li>
+          <li><a href= "/ouvrir courrier">A propos</a></li>
+          <li><a href= "/">Contact</a></li>
+        </ul>
+        </div> #}
+        {% block content %}
+      
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Mon Site. Tous droits réservés.</p>
+    </footer>
+
+      </body>    
+</html>

@@ -1,0 +1,12 @@
+<h1>Notification d'ouverture de votre courrier</h1>
+
+<p>Bonjour {{ courrier.expediteur.email }},</p>
+
+<p>Votre courrier avec l'objet "<strong>{{ courrier.objet }}</strong>" a été ouvert par le destinataire le {{ courrier.dateReception|date('d/m/Y H:i') }}.</p>
+
+<p>Message envoyé :</p>
+<blockquote>
+    {{ courrier.message }}
+</blockquote>
+
+<p>Cordialement,<br>L'équipe de gestion de courrier</p>

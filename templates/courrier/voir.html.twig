@@ -1,0 +1,17 @@
+{# templates/courrier/voir.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Voir Courrier{% endblock %}
+
+{% block body %}
+    <h1>Détails du Courrier</h1>
+
+    <p><strong>ID :</strong> {{ courrier.id }}</p>
+    <p><strong>Expéditeur :</strong> {{ courrier.expediteur.nom }}</p>
+    <p><strong>Objet :</strong> {{ courrier.objet }}</p>
+    <p><strong>Date de Réception :</strong> {{ courrier.dateReception ? courrier.dateReception|date('Y-m-d H:i') : 'Non ouvert' }}</p>
+    <p><strong>Contenu :</strong> {{ courrier.message }}</p>
+
+    <a href="{{ path('ouvrir_courrier', { id: courrier.id }) }}">Ouvrir le Courrier</a>
+{% endblock %}

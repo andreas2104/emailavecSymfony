@@ -1,35 +1,26 @@
-{# templates/courrier/mes_courriers.html.twig #}
-
-<h1>Mes courriers</h1>
-
-<h2>Courriers envoyés</h2>
-<ul>
-    {% for courrier in courriersEnvoyes %}
-        <li>
-            <strong>Destinataires :</strong> 
-            {% for destinataire in courrier.destinataire %}
-                {{ destinataire.email }}{% if not loop.last %}, {% endif %}
-            {% endfor %}
-            <br>
-            <strong>Objet :</strong> {{ courrier.objet }} <br>
-            <strong>Date d'envoi :</strong> {{ courrier.dateEnvoi|date('d/m/Y') }} <br>
-            <strong>Message :</strong> {{ courrier.message }}
-        </li>
-    {% else %}
-        <li>Aucun courrier envoyé</li>
-    {% endfor %}
-</ul>
-
-<h2>Courriers reçus</h2>
-<ul>
+{% extends 'layout/layout.html.twig' %}
+{% block content %}
+<h2>Mes Courriers Reçus</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Objet</th>
+            <th>Expéditeur</th>
+            <th>Date d'envoi</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
     {% for courrier in courrierRecus %}
-        <li>
-            <strong>Expéditeur :</strong> {{ courrier.expediteur.email }} <br>
-            <strong>Objet :</strong> {{ courrier.objet }} <br>
-            <strong>Date d'envoi :</strong> {{ courrier.dateEnvoi|date('d/m/Y') }} <br>
-            <strong>Message :</strong> {{ courrier.message }}
-        </li>
-    {% else %}
-        <li>Aucun courrier reçu</li>
+        <tr>
+            <td>{{ courrier.objet }}</td>
+            <td>{{ courrier.expediteur.email }}</td>
+            <td>{{ courrier.dateEnvoi|date('d/m/Y') }}</td>
+            <td>
+                {# <a href="{{ path('courrier_ouvrir', {'id': courrier.id}) }}" class="btn btn-primary">Ouvrir</a> #}
+            </td>
+        </tr>
     {% endfor %}
-</ul>
+    </tbody>
+</table>
+{% endblock  %}

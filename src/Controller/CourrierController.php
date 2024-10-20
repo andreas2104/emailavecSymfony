@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
@@ -74,13 +76,69 @@ class CourrierController extends AbstractController
   {
     $user = $security->getUser();
 
-    $courriersEnvoyes = $courrierRepository->findCourriersEnvoyes($user);
-
     $courrieRecus = $courrierRepository->findCourriersRecus($user);
+    
+
 
     return $this->render('courrier/mes_courriers.html.twig', [
-      'courriersEnvoyes' => $courriersEnvoyes,
+      // 'courriersEnvoyes' => $courriersEnvoyes,
       'courrierRecus' => $courrieRecus,
     ]);
+  }
+  //courier recues
+  #[Route('/courrierEnvoyer', name:'app_courrier_recurs')]
+  public function courrierEnvoyer(CourrierRepository $courrierRepository, Security $security)
+  {
+    $user = $security->getUser();
+
+    $courriersEnvoyes = $courrierRepository->findCourriersEnvoyes($user);
+
+    return $this->render('courrier/courrier_envoyer.html.twig', [
+    
+      'courriersEnvoyes' => $courriersEnvoyes,
+    ]);
+  }
+
+  //ouvrir un courrier
+  #[Route('/courrier/ouvrir/{id}', name:'ouvrir_courrier')]
+
+  public function ouvrirCourrier(Courrier $courrier, EntityManagerInterface $em, MailerInterface $mailer): Response
+  {
+   
+      $user = $this->getUser();
+      
+      // Vérifier si la date de réception n'est pas déjà définie
+      if ($courrier->getDateReception() === null) {
+          // Mettre à jour la date de réception
+          $courrier->setDateReception(new \DateTime());
+          $em->persist($courrier);
+          $em->flush();
+  
+          // Récupérer l'expéditeur du courrier
+          $expediteur = $courrier->getExpediteur();
+  
+          // Créer et envoyer le message avec Symfony Mailer
+          $email = (new Email())
+              ->from('votre.email@example.com') // Remplace par l'adresse e-mail souhaitée
+              ->to($expediteur->getEmail()) // Envoyer à l'expéditeur
+              ->subject('Courrier ouvert')
+              ->html(
+                  $this->renderView(
+                      'emails/courrier_ouvert.html.twig',
+                      [
+                          'courrier' => $courrier, 
+                          'user' => $user
+                      ]
+                  )
+              );
+          
+          
+          $mailer->send($email);
+      }
+  
+      // Retourner la vue du courrier
+      return $this->render('courrier/voir.html.twig', [
+          'courrier' => $courrier,
+      ]);
   }
 }

@@ -1,0 +1,8 @@
+<h1>Courrier - {{ courrier.objet }}</h1>
+
+<p><strong>De :</strong> {{ courrier.expediteur.email }}</p>
+<p><strong>Date d'envoi :</strong> {{ courrier.dateEnvoi|date('d/m/Y') }}</p>
+<p><strong>Message :</strong> {{ courrier.message }}</p>
+<p><strong>Pièce jointe :</strong> {{ courrier.pieceJointe }}</p>
+
+<p><a href="{{ path('app_mes_courriers') }}" class="btn btn-primary">Retour à mes courriers</a></p>

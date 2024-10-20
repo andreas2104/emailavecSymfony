@@ -1,0 +1,17 @@
+<h2>Courriers envoyés</h2>
+<ul>
+    {% for courrier in courriersEnvoyes %}
+        <li>
+            <strong>Destinataires :</strong> 
+            {% for destinataire in courrier.destinataire %}
+                {{ destinataire.email }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+            <br>
+            <strong>Objet :</strong> {{ courrier.objet }} <br>
+            <strong>Date d'envoi :</strong> {{ courrier.dateEnvoi|date('d/m/Y') }} <br>
+            <strong>Message :</strong> {{ courrier.message }}
+        </li>
+    {% else %}
+        <li>Aucun courrier envoyé</li>
+    {% endfor %}
+</ul>
