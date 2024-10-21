@@ -5,12 +5,12 @@
 {% block content %}
     <h1>Liste des Courriers</h1>
 
-    <table>
+    <table class= "custom-table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Expéditeur</th>  {# Affichage de l'expéditeur #}
-                <th>Destinataire(s)</th>  {# Affichage des destinataires #}
+                <th>Expéditeur</th>  
+                <th>Destinataire(s)</th>  
                 <th>Objet</th>
                  <th>message</th>
                   <th>piece_jointe</th>
@@ -21,9 +21,9 @@
             {% for courrier in courriers %}
                 <tr>
                     <td>{{ courrier.id }}</td>
-                    <td>{{ courrier.expediteur.email }}</td>  {# Accès à l'email de l'expéditeur #}
+                    <td>{{ courrier.expediteur.email }}</td>  
                     <td>
-                        {# Affichage des emails des destinataires #}
+                    
                         {% for destinataire in courrier.destinataire %}
                             {{ destinataire.email }}{% if not loop.last %}, {% endif %}
                         {% endfor %}
