@@ -1,3 +1,5 @@
+{% extends 'layout/layout.html.twig' %}
+{% block content %}
 <h2>Courriers envoyés</h2>
 <ul>
     {% for courrier in courriersEnvoyes %}
@@ -7,6 +9,7 @@
                 {{ destinataire.email }}{% if not loop.last %}, {% endif %}
             {% endfor %}
             <br>
+            
             <strong>Objet :</strong> {{ courrier.objet }} <br>
             <strong>Date d'envoi :</strong> {{ courrier.dateEnvoi|date('d/m/Y') }} <br>
             <strong>Message :</strong> {{ courrier.message }}
@@ -15,3 +18,4 @@
         <li>Aucun courrier envoyé</li>
     {% endfor %}
 </ul>
+{% endblock %}

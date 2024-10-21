@@ -5,23 +5,19 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} Mon site {% endblock %} </title>
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/tableau.css') }}">
 	</head>
   <body>
-  <div class = "twoside">
-    {# <div class = "layout">
-    <li><a href= " {{ path('app_courrier' )}} ">Courrier</a></li>
-    <li><a href= "/ouvrir courrier">A propos</a></li>
-  </div> #}
     <header>
       <nav>
+
         <ul>
-          <li><a href= "/">Acceuil</a></li>
-          <li><a href= "/">A propos</a></li>
-          <li><a href= "/">Contact</a></li>
+          <li><a href= "{{ path('app_courrier' )}}">Mes courrier</a></li>
+          <li><a href= "{{ path('app_mes_courriers' )}}">Courrier Recus</a></li>
+          <li><a href= "{{ path('app_courrier_envoyer' )}}">Courrier Envoyer</a></li>
         </ul>
       </nav>
-    </header> 
-    </div>
+    </header>
 
       <main>
       {# <div class="colonne">

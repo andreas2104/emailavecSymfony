@@ -86,7 +86,7 @@ class CourrierController extends AbstractController
     ]);
   }
   //courier recues
-  #[Route('/courrierEnvoyer', name:'app_courrier_recurs')]
+  #[Route('/courrierEnvoyer', name:'app_courrier_envoyer')]
   public function courrierEnvoyer(CourrierRepository $courrierRepository, Security $security)
   {
     $user = $security->getUser();
