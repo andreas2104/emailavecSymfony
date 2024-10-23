@@ -1,31 +1,41 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Merci de vous connecter !{% endblock %}
-
+{%  block stylesheets  %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ {% endblock %}
 {% block content %}
-<form method="post">
+<form method="post" style="border: 1px solid #ccc; border-radius: 10px; padding: 20px; max-width: 400px; margin: 0 auto; background-color: #f9f9f9;">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
     {% if app.user %}
         <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+            {# Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}"><i class="fa-solid fa-user">Se déconnecter</i></a> #}
         </div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Merci de vous connecter</h1>
-    <label for="inputEmail"> Votre Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Mot de passe</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+    <h1 class="h3 mb-3 font-weight-normal text-center">Merci de vous connecter</h1>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+<i class="fa-solid fa-user" style="margin-left: 11.5em; border-radius: 50%; color: black; background-color: #f0f0f0; padding: 10px; border: 2px solid black;"></i>
+<div class="form-group" style="padding:12px">
+        <label for="inputEmail" style="padding:20px 12px 12px; ">Votre Email</label>
+        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" style="margin-left:10px; padding: 5px" class="form-control" autocomplete="email" required autofocus>
+    </div>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Connecter
-    </button>
+    <div class="form-group" style="padding: 12px">
+        <label for="inputPassword" style="padding:20px 12px 12px">Mot de passe</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" style="padding: 5px" autocomplete="current-password" required>
+    </div>
+
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+    <button class="btn btn-lg btn-primary btn-block " style="background-color:green; margin-left:9em; margin-top:10px; margin-bottom:20px; font-size:1em;text-shadow:yellow;color:white" type="submit">Se connecter</button>
+
+    <div class="mb-3">
+  <a href="{{ path('app_logout') }}">S'inscrire</a>
+</div>
 </form>
+
 {% endblock %}

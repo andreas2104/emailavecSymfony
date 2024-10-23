@@ -25,7 +25,6 @@ class Courrier
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_reception = null;
 
-    // Renommer numero_suivi en piece_jointe
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $piece_jointe = null;
 
@@ -39,14 +38,23 @@ class Courrier
     #[ORM\JoinColumn(nullable: false)]
     private ?User $expediteur = null;
 
+    #[ORM\Column(type: Types::BOOLEAN, options: ["default" => false])]
+    private bool $supprime_expediteur = false;
+
+    #[ORM\Column(type: Types::BOOLEAN, options: ["default" => false])]
+    private bool $supprime_destinataire = false;
+
+
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'courriersRecus')]
     private Collection $destinataire;
 
     public function __construct()
     {
         $this->destinataire = new ArrayCollection();
+        $this->date_envoi = null; // Initialise date_envoi à null
+        $this->date_envoi = new \DateTime(); 
     }
-
+    
     // Getter et Setter pour piece_jointe
     public function getPieceJointe(): ?string
     {
@@ -83,7 +91,7 @@ class Courrier
         return $this->date_envoi;
     }
 
-    public function setDateEnvoi(\DateTimeInterface $date_envoi): static
+    public function setDateEnvoi(?\DateTimeInterface $date_envoi): static
     {
         $this->date_envoi = $date_envoi;
 
@@ -134,6 +142,29 @@ class Courrier
     public function setExpediteur(?User $expediteur): static
     {
         $this->expediteur = $expediteur;
+
+        return $this;
+    }
+    public function isSupprimeExpediteur(): bool
+    {
+        return $this->supprime_expediteur;
+    }
+
+    public function setSupprimeExpediteur(bool $supprime): static
+    {
+        $this->supprime_expediteur = $supprime;
+
+        return $this;
+    }
+
+    public function isSupprimeDestinataire(): bool
+    {
+        return $this->supprime_destinataire;
+    }
+
+    public function setSupprimeDestinataire(bool $supprime): static
+    {
+        $this->supprime_destinataire = $supprime;
 
         return $this;
     }

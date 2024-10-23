@@ -24,23 +24,38 @@ class CourrierRepository extends ServiceEntityRepository
 
     public function findCourriersEnvoyes(User $user): array
     {
-        return $this->createQueryBuilder("c")
-        ->where("c.expediteur = :userId")
-        ->setParameter('userId', $user->getId())
-        ->getQuery()
-        ->getResult();
+        return $this->createQueryBuilder('c')
+            ->where('c.expediteur = :userId')
+            ->andWhere('c.supprime_expediteur = false') // Ne récupérer que les courriers non supprimés par l'expéditeur
+            ->setParameter('userId', $user->getId())
+            ->getQuery()
+            ->getResult();
     }
-    //on recupere les courrier concue
-
+    
     public function findCourriersRecus(User $user): array
     {
         return $this->createQueryBuilder('c')
-        ->innerJoin('c.destinataire', 'd')
-        ->where('d.id = :userId')
-        ->setParameter('userId', $user->getId())
-        ->getQuery()
-        ->getResult();
+            ->innerJoin('c.destinataire', 'd')
+            ->where('d.id = :userId')
+            ->andWhere('c.supprime_destinataire = false') // Ne récupérer que les courriers non supprimés par le destinataire
+            ->setParameter('userId', $user->getId())
+            ->getQuery()
+            ->getResult();
     }
+    
+public function search(string $query): array
+{
+    return $this->createQueryBuilder('c')
+    ->leftJoin('c.expediteur', 'e') 
+    ->leftJoin('c.destinataire', 'd') 
+    ->where('e.email LIKE :query') 
+    ->orWhere('d.email LIKE :query') 
+   
+        ->setParameter('query', "{$query }%" )   
+        ->getQuery()
+        ->getResult(); 
+}
+
 
 //    /**
 //     * @return Courrier[] Returns an array of Courrier objects

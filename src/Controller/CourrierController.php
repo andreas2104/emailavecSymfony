@@ -43,15 +43,15 @@ class CourrierController extends AbstractController
       $pieceJointeFile = $form->get('piece_jointe')->getData();
       if ($pieceJointeFile) {
         try {
-            $destination = $this->getParameter('kernel.project_dir') . '/public/uploads/courriers';
-            $newFilename = uniqid() . '.' . $pieceJointeFile->guessExtension();
-            $pieceJointeFile->move($destination, $newFilename);
-            $courrier->setPieceJointe($newFilename);
+          $destination = $this->getParameter('kernel.project_dir') . '/public/uploads/courriers';
+          $newFilename = uniqid() . '.' . $pieceJointeFile->guessExtension();
+          $pieceJointeFile->move($destination, $newFilename);
+          $courrier->setPieceJointe($newFilename);
         } catch (FileException $e) {
-            $this->addFlash('error', 'Erreur lors de l\'envoi de la pièce jointe.');
-            return $this->redirectToRoute('courrier_new');
+          $this->addFlash('error', 'Erreur lors de l\'envoi de la pièce jointe.');
+          return $this->redirectToRoute('courrier_new');
         }
-    }
+      }
       $em->persist($courrier);
       $em->flush();
       return $this->redirectToRoute('app_courrier');
@@ -62,83 +62,122 @@ class CourrierController extends AbstractController
   }
   public function uploadPieceJointe($file)
   {
-      // Si un fichier est téléchargé
-      if ($file) {
-          $filename = uniqid().'.'.$file->getClientOriginalExtension();
-          $file->move($this->getParameter('upload_directory'), $filename);
-          return $filename;
-      }
-      return null;
+    // Si un fichier est téléchargé
+    if ($file) {
+      $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+      $file->move($this->getParameter('upload_directory'), $filename);
+      return $filename;
+    }
+    return null;
   }
-  
-  #[Route('/mescourriers', name:'app_mes_courriers')]
-  public function mesCourriers(CourrierRepository $courrierRepository, Security $security)
+
+  #[Route('/mescourriers', name: 'app_mes_courriers')]
+  public function mesCourriers(CourrierRepository $courrierRepository, Security $security): Response
   {
     $user = $security->getUser();
 
-    $courrieRecus = $courrierRepository->findCourriersRecus($user);
-    
+    // 
+    $courriersEnvoyes = $courrierRepository->findCourriersEnvoyes($user);
 
+    // Récupérer les courriers reçus non supprimés par le destinataire
+    $courriersRecus = $courrierRepository->findCourriersRecus($user);
 
-    return $this->render('courrier/mes_courriers.html.twig', [
-      // 'courriersEnvoyes' => $courriersEnvoyes,
-      'courrierRecus' => $courrieRecus,
+    return $this->render('courrier/courrier_recus.html.twig', [
+      'courriersEnvoyes' => $courriersEnvoyes,
+      'courriersRecus' => $courriersRecus,
     ]);
   }
-  //courier recues
-  #[Route('/courrierEnvoyer', name:'app_courrier_envoyer')]
+
+  #[Route('/courrierEnvoyer', name: 'app_courrier_envoyer')]
   public function courrierEnvoyer(CourrierRepository $courrierRepository, Security $security)
   {
+    // Récupérer l'utilisateur courant
     $user = $security->getUser();
+
+    if ($user === null) {
+
+      $this->addFlash('error', 'Vous devez être connecté pour voir vos courriers envoyés.');
+      return $this->redirectToRoute('app_home'); // Assurez-vous d'avoir une route d'accueil
+    }
 
     $courriersEnvoyes = $courrierRepository->findCourriersEnvoyes($user);
 
     return $this->render('courrier/courrier_envoyer.html.twig', [
-    
       'courriersEnvoyes' => $courriersEnvoyes,
     ]);
   }
 
+
   //ouvrir un courrier
-  #[Route('/courrier/ouvrir/{id}', name:'ouvrir_courrier')]
+  #[Route('/courrier/ouvrir/{id}', name: 'ouvrir_courrier')]
 
   public function ouvrirCourrier(Courrier $courrier, EntityManagerInterface $em, MailerInterface $mailer): Response
   {
-   
-      $user = $this->getUser();
-      
-      // Vérifier si la date de réception n'est pas déjà définie
-      if ($courrier->getDateReception() === null) {
-          // Mettre à jour la date de réception
-          $courrier->setDateReception(new \DateTime());
-          $em->persist($courrier);
-          $em->flush();
-  
-          // Récupérer l'expéditeur du courrier
-          $expediteur = $courrier->getExpediteur();
-  
-          // Créer et envoyer le message avec Symfony Mailer
-          $email = (new Email())
-              ->from('votre.email@example.com') // Remplace par l'adresse e-mail souhaitée
-              ->to($expediteur->getEmail()) // Envoyer à l'expéditeur
-              ->subject('Courrier ouvert')
-              ->html(
-                  $this->renderView(
-                      'emails/courrier_ouvert.html.twig',
-                      [
-                          'courrier' => $courrier, 
-                          'user' => $user
-                      ]
-                  )
-              );
-          
-          
-          $mailer->send($email);
-      }
-  
-      // Retourner la vue du courrier
-      return $this->render('courrier/voir.html.twig', [
-          'courrier' => $courrier,
-      ]);
+
+    $user = $this->getUser();
+
+    if ($courrier->getDateReception() === null) {
+      $courrier->setDateReception(new \DateTime());
+      $em->persist($courrier);
+      $em->flush();
+
+      $expediteur = $courrier->getExpediteur();
+      $email = (new Email())
+        ->from('votre.email@example.com')
+        ->to($expediteur->getEmail())
+        ->subject('Courrier ouvert')
+        ->html(
+          $this->renderView(
+            'emails/courrier_ouvert.html.twig',
+            [
+              'courrier' => $courrier,
+              'user' => $user
+            ]
+          )
+        );
+      $mailer->send($email);
+    }
+
+    return $this->render('courrier/voir.html.twig', [
+      'courrier' => $courrier,
+    ]);
   }
+
+  //delete courrier
+  #[Route('/courrier/supprimer/{id}', name: 'supprimer_courrier')]
+  public function supprimerCourrier(CourrierRepository $courrierRepository, Security $security, int $id): Response
+  {
+    $user = $security->getUser();
+    $courrier = $courrierRepository->find($id);
+
+    if (!$courrier) {
+      throw $this->createNotFoundException('Le courrier n\'existe pas.');
+    }
+
+    if ($courrier->getExpediteur() === $user) {
+      $courrier->setSupprimeExpediteur(true);
+    }
+    if ($courrier->getDestinataire()->contains($user)) {
+      $courrier->setSupprimeDestinataire(true);
+    }
+
+    $courrierRepository->save($courrier);
+
+    return $this->redirectToRoute('liste_courriers');
+  }
+
+  //recherche
+
+  #[Route('/courrier/recherche', name: 'recherche_courrier', methods: ['GET'])]
+  public function rechercherCourriers(Request $request, CourrierRepository $courrierRepository): Response
+  {
+    $query = $request->query->get('query');
+    $courriers = $courrierRepository->search($query);
+
+    return $this->json([
+      'courriers' => $courriers,
+    ]);
+  }
+
+  
 }

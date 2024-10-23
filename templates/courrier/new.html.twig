@@ -1,16 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau Courrier
+{% block title %}Nouveau Courrier{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('assets/css/formtype.css') }}">
 {% endblock %}
 
-{% block body %}
-	<h1>Créer un nouveau courrier</h1>
+{% block content %}
+    <h1>Créer un nouveau courrier</h1>
 
-	{{ form_start(form) }}
-	{{ form_widget(form) }}
-	{# <button class="btn">Enregistrer</button>
-	 #}
-	{{ form_end(form) }}
+    {{ form_start(form, {'attr': {'class': 'courrier-form'}}) }}
 
-	<a href="{{ path('app_courrier') }}">Retour à la liste</a>
+    <div class="form-group">
+        {{ form_label(form.expediteur, 'Expéditeur', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.expediteur, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.expediteur) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.destinataire, 'Destinataires', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.destinataire, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.destinataire) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.objet, 'Objet', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.objet, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.objet) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.message, 'Message', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.message, {'attr': {'class': 'form-control', 'rows': 5}}) }}
+        {{ form_errors(form.message) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_widget(form.piece_jointe, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.piece_jointe) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-primary'}}) }}
+    </div>
+
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_courrier') }}" class="btn btn-secondary">Retour à la liste</a>
 {% endblock %}

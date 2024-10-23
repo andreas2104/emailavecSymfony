@@ -10,13 +10,22 @@
   <body>
     <header>
       <nav>
-
         <ul>
+        <li><a href= "{{ path('courrier_new' )}}">Nouveau Message</a></li>
           <li><a href= "{{ path('app_courrier' )}}">Mes courrier</a></li>
-          <li><a href= "{{ path('app_mes_courriers' )}}">Courrier Recus</a></li>
-          <li><a href= "{{ path('app_courrier_envoyer' )}}">Courrier Envoyer</a></li>
+          <li><a href= "{{ path('app_mes_courriers' )}}">Messages Recus</a></li>
+          <li><a href= "{{ path('app_courrier_envoyer' )}}">Messages Envoyés</a></li>
         </ul>
+
+        <form method="get" action="{{ path('recherche_courrier') }}">
+        <input type="text" name="query" placeholder="Rechercher un courrier..." />
+        <button type="submit">Rechercher</button>
+       </form>
+
+    
+</div>
       </nav>
+      
     </header>
 
       <main>
