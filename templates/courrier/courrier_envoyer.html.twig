@@ -1,21 +1,35 @@
 {% extends 'layout/layout.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/tableau.css') }}">
+{% endblock %}
+
 {% block content %}
-<h2>Courriers envoyés</h2>
-<ul>
-    {% for courrier in courriersEnvoyes %}
-        <li>
-            <strong>Destinataires :</strong> 
-            {% for destinataire in courrier.destinataire %}
-                {{ destinataire.email }}{% if not loop.last %}, {% endif %}
+    <h2>Courriers envoyés</h2>
+
+    <table class="custom-table">
+    
+        <tbody>
+            {% for courrier in courriersEnvoyes %}
+                <tr>
+                    <td>
+                        {% for destinataire in courrier.destinataire %}
+                            <strong>TO :</strong> {{ destinataire.email }}
+                            {% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ courrier.objet }}</td>
+                    <td>{{ courrier.dateEnvoi|date('d/m/Y') }}</td>
+                    <td>{{ courrier.message }}</td>
+                    <td>
+                        <a href="{{ path('ouvrir_courrier', {'id': courrier.id}) }}" class="btn">Ouvrir</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">Aucun courrier envoyé</td>
+                </tr>
             {% endfor %}
-            <br>
-            
-            <strong>Objet :</strong> {{ courrier.objet }} <br>
-            <strong>Date d'envoi :</strong> {{ courrier.dateEnvoi|date('d/m/Y') }} <br>
-            <strong>Message :</strong> {{ courrier.message }}
-        </li>
-    {% else %}
-        <li>Aucun courrier envoyé</li>
-    {% endfor %}
-</ul>
+        </tbody>
+    </table>
 {% endblock %}

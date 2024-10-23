@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -27,21 +28,22 @@ class CourrierType extends AbstractType
         'class' => User::class,
         'choice_label' => 'email',
         'multiple' => true,
-        'expanded' => false,
+        'expanded' => true  ,
         'label' => 'Destinataire'
       ])
 
-      ->add('date_envoi')
-      ->add('date_reception')
-
+      // ->add('date_envoi')
+      // ->add('date_reception')
+        
       ->add('objet', TextType::class, [
         'label' => 'Objet (Texte uniquement)',
         'required' => true,  // Le champ est obligatoire
       ])
 
-      ->add('message', TextType::class, [
+      ->add('message', TextareaType::class, [
         'label' => 'Message',
         'required' => true,  // Le champ est obligatoire
+        'attr' => ['row' => 5],
       ])
 
       ->add('piece_jointe', FileType::class, [

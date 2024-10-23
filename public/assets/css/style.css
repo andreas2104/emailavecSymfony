@@ -3,6 +3,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f4f4f4;
+  
 }
 
 .twoside {
@@ -59,9 +60,10 @@ nav ul li a:hover {
   /* padding: 20px; */
 /* } */
 
-/* main { */
+main { 
   /* display: flex; */
-/* } */
+  border-radius: 5%;
+ }
 .colonne {
   margin: 0;
   padding: 0;

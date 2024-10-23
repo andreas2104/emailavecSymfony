@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Utilisateurs{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('assets/css/formtype.css') }}">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Liste des Utilisateurs</h1>
+
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Email</th>
+                    <th>Nom</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.nom }}</td>
+                    <td>
+                        <a href="{{ path('user_edit', {id: user.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                        <form action="{{ path('user_delete', {id: user.id}) }}" method="post" style="display:inline;">
+                            <input type="submit" value="Supprimer" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr ?');" />
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" class="text-center">Aucun utilisateur trouvé.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ path('registration') }}" class="btn btn-primary">Ajouter un Utilisateur</a>
+    </div>
+{% endblock %}
