@@ -1,0 +1,10 @@
+<h1>Renvoyé: {{ courrier.objet }}</h1>
+
+<p>Expéditeur: {{ user.email }}</p>
+<p>Date de réception: {{ courrier.dateReception ? courrier.dateReception|date('d/m/Y') : 'Non reçu' }}</p>
+
+<p>{{ courrier.message|nl2br }}</p>
+
+{% if courrier.pieceJointe %}
+    <p>Pièce jointe: <a href="{{ asset('uploads/courriers/' ~ courrier.pieceJointe) }}">{{ courrier.pieceJointe }}</a></p>
+{% endif %}

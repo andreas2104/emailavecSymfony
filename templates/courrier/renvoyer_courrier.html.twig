@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Renvoyer le Courrier{% endblock %}
+
+{% block body %}
+    <h1>Renvoyer le Courrier</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.destinataire) }}
+        {{ form_row(form.objet) }}
+        {{ form_row(form.message) }}
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('app_mes_courriers') }}" class="btn btn-secondary">Annuler</a>
+{% endblock %}

@@ -1,26 +1,44 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome andreas!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Bienvenue Andreas!{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
+    {# Liens vers les styles CSS, gérés par Webpack Encore #}
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+    {# Header principal avec une barre de navigation simple #}
+    <header class="header">
+        <nav>
+            <ul>
+                {# <li><a href="{{ path('homepage') }}">Accueil</a></li>
+                <li><a href="{{ path('about') }}">À propos</a></li>
+                <li><a href="{{ path('services') }}">Services</a></li>
+                <li><a href="{{ path('contact') }}">Contact</a></li> #}
+            </ul>
+        </nav>
+    </header>
+
+    {# Bloc pour le contenu principal #}
+    <main>
         {% block body %}
-        <div class = 'header'></div>
-
-        
-        {% block content%}
+        <section class="main-content">
+            {% block content %}
+            <h1>Bienvenue sur votre site!</h1>
+            <p>Ceci est la page d'accueil de votre application Symfony.</p>
+            {% endblock %}
+        </section>
         {% endblock %}
+    </main>
 
-        {% endblock %}
-    </body>
+    {# Scripts JS, gérés par Webpack Encore #}
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</body>
 </html>
