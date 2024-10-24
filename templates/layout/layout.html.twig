@@ -1,49 +1,115 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} Mon site {% endblock %} </title>
-    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Mon site {% endblock %}</title>
+    {# <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}"> #}
     <link rel="stylesheet" href="{{ asset('assets/css/tableau.css') }}">
-	</head>
-  <body>
-    <header>
-      <nav>
-        <ul>
-        <li><a href= "{{ path('courrier_new' )}}">Nouveau Message</a></li>
-          <li><a href= "{{ path('app_courrier' )}}">Mes courrier</a></li>
-          <li><a href= "{{ path('app_mes_courriers' )}}">Messages Recus</a></li>
-          <li><a href= "{{ path('app_courrier_envoyer' )}}">Messages Envoyés</a></li>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #272323;
+            z-index: 1000;
+            padding: 1rem 0;
+            display: flex;
+            align-items: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            margin: 0;
+        }
+
+        nav ul li {
+            margin: 0 1em;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        form {
+            margin-left: auto;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        main {
+            margin-top: 70px; 
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto; 
+            height: calc(100vh - 70px);
+            background-color: #f4f4f4;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <nav class="navbar">
+        <ul class="nav">
+            <li class="nav-item"><a class="nav-link" href="{{ path('courrier_new') }}">Nouveau Message</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ path('app_courrier') }}">Mes courriers</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ path('app_mes_courriers') }}">Messages Reçus</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ path('app_courrier_envoyer') }}">Messages Envoyés</a></li>
+            <li class="nav-item" style="margin-left: auto;"><a class="nav-link" href="{{ path('app_user') }}">Compte</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Déconnecter ?</a></li>
         </ul>
 
-        <form method="get" action="{{ path('recherche_courrier') }}">
-        <input type="text" name="query" placeholder="Rechercher un courrier..." />
-        <button type="submit">Rechercher</button>
-       </form>
+        <form method="get" action="{{ path('recherche_courrier') }}" style="display: inline;">
+            <input type="text" name="query" placeholder="Rechercher un courrier..." />
+            <button type="submit" class="btn btn-primary">Rechercher</button>
+        </form>
+    </nav>
+</header>
 
-    
-</div>
-      </nav>
-      
-    </header>
+<main>
+    {% block content %}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} fade show" role="alert" id="flash-message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {% endblock %}
+</main>
 
-      <main>
-      {# <div class="colonne">
-      <ul >
-          <li><a href= " {{ path('app_courrier' )}} ">Courrier</a></li>
-          <li><a href= "/ouvrir courrier">A propos</a></li>
-          <li><a href= "/">Contact</a></li>
-        </ul>
-        </div> #}
-        {% block content %}
-      
-        {% endblock %}
-    </main>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    setTimeout(function() {
+        var alert = document.getElementById('flash-message');
+        if (alert) {
+            alert.classList.remove('show');
+            alert.classList.add('fade');
+            setTimeout(function() {
+                alert.remove();
+            }, 500);
+        }
+    }, 3000);
+</script>
 
-    <footer>
-        <p>&copy; 2024 Mon Site. Tous droits réservés.</p>
-    </footer>
-
-      </body>    
+</body>
 </html>

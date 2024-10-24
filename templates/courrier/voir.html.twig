@@ -14,4 +14,19 @@
 </div>
 
 <a href="{{ path('app_mes_courriers') }}" class="btn btn-secondary">Retour aux courriers reçus</a>
+
+<p><strong>Pièce jointe :</strong> 
+    {% if courrier.pieceJointe %}
+        <a href="{{ asset('uploads/pieces_jointes/' ~ courrier.pieceJointe) }}" download>Télécharger la pièce jointe</a>
+    {% else %}
+        Aucun fichier joint
+    {% endif %}
+</p>
+
+<!-- Bouton pour renvoyer le courrier -->
+<p>
+    <a href="{{ path('renvoyer_courrier', {'id': courrier.id}) }}" class="btn btn-secondary">Renvoyer ce courrier</a>
+</p>
+
+
 {% endblock %}

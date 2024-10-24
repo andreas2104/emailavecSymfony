@@ -15,6 +15,7 @@
                 <tr>
                     <th>Email</th>
                     <th>Nom</th>
+                    <th>Prenom</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -23,6 +24,7 @@
                 <tr>
                     <td>{{ user.email }}</td>
                     <td>{{ user.nom }}</td>
+                    <td>{{ user.prenom }}</td>
                     <td>
                         <a href="{{ path('user_edit', {id: user.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
                         <form action="{{ path('user_delete', {id: user.id}) }}" method="post" style="display:inline;">
@@ -39,5 +41,6 @@
         </table>
 
         <a href="{{ path('registration') }}" class="btn btn-primary">Ajouter un Utilisateur</a>
+    <a href="{{ path('app_mes_courriers') }}" class="btn btn-secondary">Mes courriers</a>
     </div>
 {% endblock %}

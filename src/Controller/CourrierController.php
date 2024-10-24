@@ -70,7 +70,7 @@ class CourrierController extends AbstractController
     }
     return null;
   }
-
+//courrier recue 
   #[Route('/mescourriers', name: 'app_mes_courriers')]
   public function mesCourriers(CourrierRepository $courrierRepository, Security $security): Response
   {
@@ -120,7 +120,7 @@ class CourrierController extends AbstractController
       $courrier->setDateReception(new \DateTime());
       $em->persist($courrier);
       $em->flush();
-
+      $this->addFlash('success', 'Accusé de réception enregistré.');
       $expediteur = $courrier->getExpediteur();
       $email = (new Email())
         ->from('votre.email@example.com')
@@ -142,30 +142,40 @@ class CourrierController extends AbstractController
       'courrier' => $courrier,
     ]);
   }
-
-  //delete courrier
   #[Route('/courrier/supprimer/{id}', name: 'supprimer_courrier')]
-  public function supprimerCourrier(CourrierRepository $courrierRepository, Security $security, int $id): Response
-  {
+public function supprimerCourrier(CourrierRepository $courrierRepository, Security $security, EntityManagerInterface $entityManager, int $id): Response
+{
     $user = $security->getUser();
     $courrier = $courrierRepository->find($id);
 
     if (!$courrier) {
-      throw $this->createNotFoundException('Le courrier n\'existe pas.');
+        throw $this->createNotFoundException('Le courrier n\'existe pas.');
     }
 
+    // Marquer le courrier comme supprimé pour l'utilisateur
     if ($courrier->getExpediteur() === $user) {
-      $courrier->setSupprimeExpediteur(true);
+        $courrier->setSupprimeExpediteur(true);
+        $entityManager->persist($courrier);
+        $entityManager->flush();
+        
+        // Rediriger vers la liste des courriers envoyés
+        return $this->redirectToRoute('app_courrier_envoyer');  // Remplacez 'app_courrier_envoyes' par le bon nom de route
     }
+
     if ($courrier->getDestinataire()->contains($user)) {
-      $courrier->setSupprimeDestinataire(true);
+        $courrier->setSupprimeDestinataire(true);
+        $entityManager->persist($courrier);
+        $entityManager->flush();
+        
+        // Rediriger vers la liste des courriers reçus
+        return $this->redirectToRoute('app_mes_courriers');  // Remplacez 'app_courrier_recus' par le bon nom de route
     }
 
-    $courrierRepository->save($courrier);
+    // Si l'utilisateur n'est ni l'expéditeur ni le destinataire, gérer le cas (peut-être lancer une exception ou un message d'erreur)
+    throw $this->createAccessDeniedException('Vous n\'avez pas la permission de masquer ce courrier.');
+}
 
-    return $this->redirectToRoute('liste_courriers');
-  }
-
+  
   //recherche
 
   #[Route('/courrier/recherche', name: 'recherche_courrier', methods: ['GET'])]
@@ -180,4 +190,45 @@ class CourrierController extends AbstractController
   }
 
   
-}
+  #[Route('/renvoyer-courrier/{id}', name: 'renvoyer_courrier')]
+  public function renvoyerCourrier(Request $request, Courrier $courrier, EntityManagerInterface $entityManager): Response
+  {
+      // Créer une copie du courrier à renvoyer
+      $nouveauCourrier = new Courrier();
+      $nouveauCourrier->setExpediteur($this->getUser()); // L'utilisateur connecté est le nouvel expéditeur
+      $nouveauCourrier->setObjet($courrier->getObjet());
+      $nouveauCourrier->setMessage($courrier->getMessage());
+      $nouveauCourrier->setPieceJointe($courrier->getPieceJointe()); // Copier la pièce jointe si elle existe
+      $nouveauCourrier->setDateEnvoi(new \DateTime()); // Mettre à jour la date d'envoi
+      $nouveauCourrier->setType($courrier->getType() ?? 'renvoi'); // Définir le type, peut-être "renvoi"
+  
+     
+      $form = $this->createForm(CourrierType::class, $nouveauCourrier);
+  
+      $form->handleRequest($request);
+  
+      if ($form->isSubmitted() && $form->isValid()) {
+
+          $destinataires = $form->get('destinataire')->getData();
+          foreach ($destinataires as $destinataire) {
+              $nouveauCourrier->addDestinataire($destinataire);
+          }
+  
+          $entityManager->persist($nouveauCourrier);
+          $entityManager->flush();
+          $this->addFlash('success', 'Le courrier a été renvoyé avec succès.');
+  
+          return $this->redirectToRoute('app_mes_courriers'); 
+      }
+  
+      return $this->render('courrier/renvoyer_courrier.html.twig', [
+          'form' => $form->createView(),
+      ]);
+  }
+  
+  
+  }
+  
+
+  
+

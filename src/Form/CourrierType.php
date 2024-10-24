@@ -6,6 +6,7 @@ use App\Entity\Courrier;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -18,7 +19,13 @@ class CourrierType extends AbstractType
   public function buildForm(FormBuilderInterface $builder, array $options): void
   {
     $builder
-      ->add('type')
+      ->add('type', ChoiceType::class, [
+        'choices'  => [
+          'Type 1' => 'type_1',
+          'Type 2' => 'type_2',
+      ],
+      'required' => true,
+  ])
       ->add('expediteur', EntityType::class, [
         'class' => User::class,
         'choice_label' => 'email',
@@ -31,9 +38,6 @@ class CourrierType extends AbstractType
         'expanded' => true  ,
         'label' => 'Destinataire'
       ])
-
-      // ->add('date_envoi')
-      // ->add('date_reception')
         
       ->add('objet', TextType::class, [
         'label' => 'Objet (Texte uniquement)',
