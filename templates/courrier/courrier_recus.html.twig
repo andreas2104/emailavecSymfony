@@ -1,41 +1,26 @@
-{% extends 'layout/layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('assets/css/tableau.css') }}">
-{% endblock %}
+{% block body %}
+    <h1>Mes Courriers</h1>
 
-{% block content %}
-<h2>Mes Courriers Reçus</h2>
+    <h2>Courriers Envoyés</h2>
+    <ul>
+        {% for courrier in courriersEnvoyes %}
+            <li>{{ courrier.objet }} - {{ courrier.dateEnvoie|date('Y-m-d H:i') }}</li>
+        {% endfor %}
+    </ul>
 
-<table class="custom-table">
-    <thead>
-        <tr>
-            <th>Expéditeur</th>
-            <th>Objet</th>
-            <th>Date d'envoi</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for courrier in courriersRecus %}
-        {# Vérifiez que le courrier n'est pas masqué par l'utilisateur actuel #}
-        {% if not courrier.supprimeExpediteur and not courrier.supprimeDestinataire %}
-        <tr>
-            <td>{{ courrier.expediteur.email }}</td>
-            <td>{{ courrier.objet }}</td>
-            <td>{{ courrier.dateEnvoi|date('d/m/Y') }}</td>
-            <td>
-                <a href="{{ path('ouvrir_courrier', {'id': courrier.id}) }}" class="btn">Ouvrir</a>
-                <a href="{{ path('supprimer_courrier', {'id': courrier.id}) }}" class="btn btn-danger" 
-                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce courrier ?');">Supprimer</a>
-            </td>
-        </tr>    
-        {% endif %}
-    {% else %}
-        <tr>
-            <td colspan="4" class="text-center">Aucun courrier trouvé</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+    <h2>Courriers Reçus</h2>
+    <ul>
+        {% for courrier in courriersRecus %}
+            <li>
+                {{ courrier.objet }} - {{ courrier.dateEnvoie|date('Y-m-d H:i') }}
+                {% if not courrier.estRecu %}
+                    <a href="{{ path('courrier_marquer_recu', {id: courrier.id}) }}">Marquer comme reçu</a>
+                {% else %}
+                    <span> - Reçu</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

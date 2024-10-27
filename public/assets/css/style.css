@@ -1,45 +1,88 @@
-/* Style pour la barre de navigation collante */
-.navbar {
-  position: sticky;
-  top: 0;
-  background-color: #272323;
-  z-index: 1000;
-  padding: 1rem 0;
-  display: flex;
-  align-items: center;
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
 }
 
-/* Style pour le contenu de la navigation */
-nav ul {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  margin: 0;
+.nav-col {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 200px;
+    background-color: rgb(5, 71, 97);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
-nav ul li {
-  margin: 0 1em;
+.nav-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-nav ul li a {
-  color: white;
-  text-decoration: none;
-  padding: 0.5rem;
+.nav-col ul li {
+    margin: 1em 0;
 }
 
-nav ul li a:hover {
-  text-decoration: underline;
+.nav-col ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem;
+    display: block;
 }
 
-form {
-  margin-left: auto;
+.nav-col ul li a:hover {
+    text-decoration: underline;
+    border-radius: 5%;
+    background-color: rgb(99, 85, 85); 
+    padding: 0.5em;
+    
 }
 
-/* Style pour permettre à la section principale de scroller */
+
+.nav-row {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 200px; 
+    background-color:  rgb(5, 71, 97);
+    padding: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.nav-row ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    margin: 0;
+}
+
+.nav-row ul li {
+    margin-left: 1em;
+}
+
+.nav-row ul li a {
+    color: white;
+    text-decoration: none;
+}
+.nav-row ul li a:hover {
+  border-radius: 5%;
+  background-color: rgb(99, 85, 85); 
+  padding: 0.5em;
+}
+
 main {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto; /* Permet le défilement vertical */
-  height: calc(100vh - 60px); /* Ajuste la hauteur pour éviter que le contenu dépasse l'écran */
-  background-color: #ffffff;
+    margin-left: 200px; 
+    padding: 20px;
+    flex: 1;
+    margin-top: 60px;
+    background-color: #f4f4f4;
 }
+

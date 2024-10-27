@@ -16,13 +16,11 @@ class Courrier
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_envoi = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_reception = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
@@ -31,28 +29,29 @@ class Courrier
     #[ORM\Column(type: Types::TEXT)]
     private ?string $objet = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $message = null;
-
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $expediteur = null;
-
-    #[ORM\Column(type: Types::BOOLEAN, options: ["default" => false])]
-    private bool $supprime_expediteur = false;
-
-    #[ORM\Column(type: Types::BOOLEAN, options: ["default" => false])]
-    private bool $supprime_destinataire = false;
 
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'courriersRecus')]
     private Collection $destinataire;
 
+    #[ORM\Column(length: 50)]
+    private ?string $expedCourrier = null;
+
+    #[ORM\Column(length: 50)]
+    private ?string $status = null;
+
+    #[ORM\ManyToOne(inversedBy: 'courrier')]
+    private ?HistoriqueCourrier $historiqueCourrier = null;
+
     public function __construct()
     {
         $this->destinataire = new ArrayCollection();
         $this->date_envoi = null; // Initialise date_envoi à null
-        $this->date_envoi = new \DateTime(); 
+        $this->date_envoi = new \DateTime('now'); 
+        $this->date_reception = new \DateTime('now');
     }
     
     // Getter et Setter pour piece_jointe
@@ -72,18 +71,6 @@ class Courrier
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): static
-    {
-        $this->type = $type;
-
-        return $this;
     }
 
     public function getDateEnvoi(): ?\DateTimeInterface
@@ -122,18 +109,6 @@ class Courrier
         return $this;
     }
 
-    public function getMessage(): ?string
-    {
-        return $this->message;
-    }
-
-    public function setMessage(string $message): static
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
     public function getExpediteur(): ?User
     {
         return $this->expediteur;
@@ -142,29 +117,6 @@ class Courrier
     public function setExpediteur(?User $expediteur): static
     {
         $this->expediteur = $expediteur;
-
-        return $this;
-    }
-    public function isSupprimeExpediteur(): bool
-    {
-        return $this->supprime_expediteur;
-    }
-
-    public function setSupprimeExpediteur(bool $supprime): static
-    {
-        $this->supprime_expediteur = $supprime;
-
-        return $this;
-    }
-
-    public function isSupprimeDestinataire(): bool
-    {
-        return $this->supprime_destinataire;
-    }
-
-    public function setSupprimeDestinataire(bool $supprime): static
-    {
-        $this->supprime_destinataire = $supprime;
 
         return $this;
     }
@@ -189,6 +141,42 @@ class Courrier
     public function removeDestinataire(User $destinataire): static
     {
         $this->destinataire->removeElement($destinataire);
+
+        return $this;
+    }
+
+    public function getExpedCourrier(): ?string
+    {
+        return $this->expedCourrier;
+    }
+
+    public function setExpedCourrier(string $expedCourrier): static
+    {
+        $this->expedCourrier = $expedCourrier;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getHistoriqueCourrier(): ?HistoriqueCourrier
+    {
+        return $this->historiqueCourrier;
+    }
+
+    public function setHistoriqueCourrier(?HistoriqueCourrier $historiqueCourrier): static
+    {
+        $this->historiqueCourrier = $historiqueCourrier;
 
         return $this;
     }

@@ -1,0 +1,36 @@
+{% extends 'layout/layout.html.twig' %}
+
+{% block title %}Historique des Courriers{% endblock %}
+
+{% block content %}
+    <h1>Historique des Courriers</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Objet</th>
+                    <th>Expéditeur</th>
+                    <th>Date d'Envoi</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for historique in historique %}
+                    <tr>
+                        <td>{{ historique.id }}</td>
+                        <td>{{ historique.objet }}</td>
+                        <td>{{ historique.expediteur }}</td>
+                        <td>{{ historique.dateEnvoie ? historique.dateEnvoie|date('Y-m-d H:i:s') : 'N/A' }}</td>
+                        <td>
+                            <form method="post" action="{{ path('supprimer_historique', {'id': historique.id}) }}">
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    <a href="{{ path('app_courrier') }}">Retour à la liste des courriers</a>
+{% endblock %}
