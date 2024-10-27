@@ -4,84 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} Mon site {% endblock %}</title>
-    {# <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}"> #}
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/tableau.css') }}">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background-color: #272323;
-            z-index: 1000;
-            padding: 1rem 0;
-            display: flex;
-            align-items: center;
-        }
-        nav ul {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            margin: 0;
-        }
-
-        nav ul li {
-            margin: 0 1em;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            padding: 0.5rem;
-        }
-
-        nav ul li a:hover {
-            text-decoration: underline;
-        }
-
-        form {
-            margin-left: auto;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        main {
-            margin-top: 70px; 
-            padding: 20px;
-            flex: 1;
-            overflow-y: auto; 
-            height: calc(100vh - 70px);
-            background-color: #f4f4f4;
-        }
-
-    </style>
 </head>
 <body>
 
-<header>
-    <nav class="navbar">
-        <ul class="nav">
-            <li class="nav-item"><a class="nav-link" href="{{ path('courrier_new') }}">Nouveau Message</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ path('app_courrier') }}">Mes courriers</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ path('app_mes_courriers') }}">Messages Reçus</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ path('app_courrier_envoyer') }}">Messages Envoyés</a></li>
-            <li class="nav-item" style="margin-left: auto;"><a class="nav-link" href="{{ path('app_user') }}">Compte</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Déconnecter ?</a></li>
-        </ul>
+<nav class="nav-col">
+<h1 style = "background: url('/uploads/courriers/logo.jpg');
+background-size: contain; 
+width: 20px;
+height: 20px;
+border-radius: 30%;
+padding: 20px; 
+text-align: center; 
+display: inline-block; "></h1>
+ <h1 style="font-size:2rem; color: white; border-radius:20px">Tresor Public</h1> 
+    <ul>
+        {% if is_granted('ROLE_ADMIN') %}
+    <li><a href="{{ path('courrier_new') }}">Nouveau Courrier</a></li>
+            {% endif %}
+        <li><a href="{{ path('app_courrier') }}">Mes Courriers</a></li>
+            {% if is_granted('ROLE_ADMIN') %}
+        <li><a href="{{ path('app_historique') }}"> Historique</a></li>
+            {% endif %}
+    </ul>
+</nav>
 
-        <form method="get" action="{{ path('recherche_courrier') }}" style="display: inline;">
-            <input type="text" name="query" placeholder="Rechercher un courrier..." />
-            <button type="submit" class="btn btn-primary">Rechercher</button>
-        </form>
-    </nav>
-</header>
+
+<nav class="nav-row">
+    <ul>
+        <li><a href="{{ path('app_user') }}">Compte</a></li>
+        <li><a href="{{ path('app_logout') }}">Déconnecter ?</a></li>
+    </ul>
+</nav>
 
 <main>
     {% block content %}

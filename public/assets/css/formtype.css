@@ -1,111 +1,77 @@
-/* form css */
+
 body {
   font-family: Arial, sans-serif;
-  /* Police d'écriture générale */
   background-color: #f9f9f9;
-  /* Couleur de fond */
   padding: 20px;
-  /* Espacement autour du contenu */
+ 
 }
 
 h1 {
   margin-bottom: 20px;
-  /* Espacement sous le titre */
   color: #333;
-  /* Couleur du titre */
 }
 
 .courrier-form {
   max-width: 600px;
-  /* Largeur maximum du formulaire */
   margin: 0 auto;
-  /* Centrer le formulaire */
   padding: 20px;
-  /* Espacement interne */
   background-color: white;
-  /* Couleur de fond du formulaire */
   border-radius: 8px;
-  /* Coins arrondis */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  /* Ombre légère autour du formulaire */
 }
 
 .form-group {
   margin-bottom: 1.5rem;
-  /* Espacement entre les champs */
 }
 
 .form-label {
   display: block;
-  /* Étiquettes sur une nouvelle ligne */
   margin-bottom: 0.5rem;
-  /* Espacement entre l'étiquette et le champ */
   font-weight: bold;
-  /* Mettre l'étiquette en gras */
 }
 
 .form-control {
   width: 100%;
-  /* Champs prennent toute la largeur */
   padding: 10px;
-  /* Espacement interne */
   border: 1px solid #ccc;
-  /* Bordure */
   border-radius: 4px;
-  /* Coins arrondis */
   box-sizing: border-box;
-  /* Inclure le padding et la bordure dans la largeur */
 }
 
 .form-control:focus {
   border-color: #007bff;
-  /* Couleur de la bordure au focus */
+ 
   outline: none;
-  /* Supprimer le contour par défaut */
 }
 
 .btn {
   display: inline-block;
-  /* Les boutons prennent la largeur nécessaire */
   padding: 10px 20px;
-  /* Espacement interne du bouton */
   color: white;
-  /* Couleur du texte */
   background-color: #007bff;
-  /* Couleur de fond du bouton */
   border: none;
-  /* Pas de bordure */
   border-radius: 4px;
-  /* Coins arrondis */
   cursor: pointer;
-  /* Curseur de souris pointer */
   text-align: center;
-  /* Centrer le texte */
 }
 
 .btn-primary {
   background-color: #007bff;
-  /* Couleur du bouton principal */
 }
 
 .btn-secondary {
   background-color: #6c757d;
-  /* Couleur du bouton secondaire */
 }
 
 .btn:hover {
-  background-color: #0056b3;
-  /* Couleur du bouton au survol */
+  background-color: #061b31;
 }
 
 .btn-secondary:hover {
   background-color: #5a6268;
-  /* Couleur du bouton secondaire au survol */
 }
 
 .error {
   color: red;
-  /* Couleur des erreurs */
   font-size: 0.875rem;
-  /* Taille de police pour les erreurs */
 }

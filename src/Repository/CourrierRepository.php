@@ -26,37 +26,55 @@ class CourrierRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
             ->where('c.expediteur = :userId')
-            ->andWhere('c.supprime_expediteur = false') // Ne récupérer que les courriers non supprimés par l'expéditeur
             ->setParameter('userId', $user->getId())
             ->getQuery()
             ->getResult();
     }
-    
-    public function findCourriersRecus(User $user): array
+    public function findByUser(User $user): array
     {
         return $this->createQueryBuilder('c')
-            ->innerJoin('c.destinataire', 'd')
-            ->where('d.id = :userId')
-            ->andWhere('c.supprime_destinataire = false') // Ne récupérer que les courriers non supprimés par le destinataire
-            ->setParameter('userId', $user->getId())
+            ->andWhere('c.user = :user')
+            ->setParameter('user', $user)
             ->getQuery()
             ->getResult();
+    } 
+    
+ 
+    public function searchCourriers($searchTerm)
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->leftJoin('c.expediteur', 'e')
+            ->leftJoin('c.destinataire', 'd')
+            ->addSelect('e', 'd');
+    
+     
+        $qb->where('c.objet LIKE :searchTerm')
+           ->setParameter('searchTerm', '%' . $searchTerm . '%');
+    
+    
+        $qb->orWhere('e.email LIKE :searchTerm');
+    
+
+        $qb->orWhere('d.email LIKE :searchTerm');
+    
+      
+        if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $searchTerm)) {
+        
+            $date = \DateTime::createFromFormat('d/m/Y', $searchTerm);
+            if ($date) {
+                $qb->orWhere('c.date_envoi = :searchDate')
+                   ->setParameter('searchDate', $date->format('Y-m-d'));
+            }
+        } elseif (preg_match('/^\d{4}-\d{2}-\d{2}$/', $searchTerm)) {
+          
+            $date = new \DateTime($searchTerm);
+            $qb->orWhere('c.date_envoi = :searchDate')
+               ->setParameter('searchDate', $date->format('Y-m-d'));
+        }
+    
+        return $qb->getQuery()->getResult();
     }
     
-public function search(string $query): array
-{
-    return $this->createQueryBuilder('c')
-    ->leftJoin('c.expediteur', 'e') 
-    ->leftJoin('c.destinataire', 'd') 
-    ->where('e.email LIKE :query') 
-    ->orWhere('d.email LIKE :query') 
-   
-        ->setParameter('query', "{$query }%" )   
-        ->getQuery()
-        ->getResult(); 
-}
-
-
 //    /**
 //     * @return Courrier[] Returns an array of Courrier objects
 //     */

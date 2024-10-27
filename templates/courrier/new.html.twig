@@ -1,14 +1,28 @@
 {% extends 'base.html.twig' %}
+{# {% extends 'layout/layout.html.twig' %} #}
 
 {% block title %}Nouveau Courrier{% endblock %}
+
 {% block stylesheets %}
-<link rel="stylesheet" href="{{ asset('assets/css/formtype.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/formtype.css') }}">
 {% endblock %}
 
 {% block content %}
-    <h1>Créer un nouveau courrier</h1>
+    <h1 style="text-align:center">Créer un nouveau courrier</h1>
 
     {{ form_start(form, {'attr': {'class': 'courrier-form'}}) }}
+
+    <div class="form-group">
+        {{ form_label(form.date_envoi, 'Date d\'envoi', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.date_envoi, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.date_envoi) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.date_reception, 'Date de réception', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.date_reception, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.date_reception) }}
+    </div>
 
     <div class="form-group">
         {{ form_label(form.expediteur, 'Expéditeur', {'label_attr': {'class': 'form-label'}}) }}
@@ -17,24 +31,31 @@
     </div>
 
     <div class="form-group">
-        {{ form_label(form.destinataire, 'Destinataires', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_label(form.destinataire, 'Destinataire(s)', {'label_attr': {'class': 'form-label'}}) }}
         {{ form_widget(form.destinataire, {'attr': {'class': 'form-control'}}) }}
         {{ form_errors(form.destinataire) }}
     </div>
 
     <div class="form-group">
-        {{ form_label(form.objet, 'Objet', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.objet, {'attr': {'class': 'form-control'}}) }}
+        {{ form_label(form.objet, 'Objet (Texte uniquement)', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.objet, {'attr': {'class': 'form-control', 'rows': 5}}) }}
         {{ form_errors(form.objet) }}
     </div>
 
     <div class="form-group">
-        {{ form_label(form.message, 'Message', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.message, {'attr': {'class': 'form-control', 'rows': 5}}) }}
-        {{ form_errors(form.message) }}
+        {{ form_label(form.expedCourrier, 'Expéditeur du courrier', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.expedCourrier, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.expedCourrier) }}
     </div>
 
+    {# <div class="form-group">
+        {{ form_label(form.status, 'Statut', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.status, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.status) }}
+    </div> #}
+
     <div class="form-group">
+        {{ form_label(form.piece_jointe, 'Pièce jointe (fichier, document, image, etc.)', {'label_attr': {'class': 'form-label'}}) }}
         {{ form_widget(form.piece_jointe, {'attr': {'class': 'form-control'}}) }}
         {{ form_errors(form.piece_jointe) }}
     </div>

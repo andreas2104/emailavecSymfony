@@ -1,46 +1,78 @@
-{# {% extends 'base.html.twig' %} #}
 {% extends 'layout/layout.html.twig' %}
 {% block title %}Liste des Courriers{% endblock %}
 
 {% block content %}
-    <h1>Liste des Courriers</h1>
+<form action="{{ path('app_courrier_recherche') }}" method="get">
+    <input type="text" name="searchTerm" placeholder="Rechercher par date, expéditeur, destinataire, ou objet..." />
+    <button type="submit">Rechercher</button>
+</form>
 
-    <table class= "custom-table">
-        <thead>
+<table class="custom-table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Expéditeur</th>
+            <th>Destinataire(s)</th>
+            <th>Objet</th>
+            <th>Pièce jointe</th>
+            <th>Expediteur Courrier</th>
+            <th>Date D'envoie</th>
+            <th>Date Réception</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if courriers is empty %}
             <tr>
-                <th>Id</th>
-                <th>Expéditeur</th>  
-                <th>Destinataire(s)</th>  
-                <th>Objet</th>
-                 <th>message</th>
-                  <th>piece_jointe</th>
-                <th>Actions</th>
+                <td colspan="8">Aucun courrier trouvé.</td>
             </tr>
-        </thead>
-        <tbody>
+        {% else %}
             {% for courrier in courriers %}
                 <tr>
                     <td>{{ courrier.id }}</td>
-                    <td>{{ courrier.expediteur.email }}</td>  
+                    <td>{{ courrier.expediteur.email }}</td>
                     <td>
-                    
                         {% for destinataire in courrier.destinataire %}
                             {{ destinataire.email }}{% if not loop.last %}, {% endif %}
                         {% endfor %}
                     </td>
                     <td>{{ courrier.objet }}</td>
-                    <td>{{ courrier.message }}</td>
-                    <td>{{ courrier.pieceJointe }}</td>
                     <td>
-                        <a href="{{ path('app_courrier', {'id': courrier.id}) }}">Afficher</a>
-                        {# <a href="{{ path('courrier_edit', {'id': courrier.id}) }}">Modifier</a> #}
+                        {% if courrier.pieceJointe %}
+                        <a href="{{ asset('uploads/courriers/' ~ courrier.pieceJointe) }}" class="attachment-icon" target="_blank" title="Télécharger la pièce jointe">
+                    <i class="fas fa-file"></i>
+                </a>
+                
+                        {% else %}
+                            Pas de pièce jointe
+                        {% endif %}
+                    </td>
+                <td>{{ courrier.expedCourrier }}</td>
+                    <td>{{ courrier.dateEnvoi ? courrier.dateEnvoi|date('d/m/Y H:i') : 'Non reçue' }}</td>
+                    <td>{{ courrier.dateReception ? courrier.dateReception|date('d/m/Y H:i') : 'Non reçue' }}</td>
+                    <td>{{ courrier.status }}</td>
+                        <td>
+                        <a href="{{ path('app_courrier_ouvrir', {'id': courrier.id}) }}" title="Ouvrir">
+                            <i class="fas fa-eye"></i> <!-- Icône pour ouvrir -->
+                        </a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('courrier_edit', {'id': courrier.id}) }}" class="btn" title="Modifier">
+                            <i class="fas fa-edit"></i> <!-- Icône pour modification -->
+                        </a>
+                        <a href="{{ path('supprimer_courrier', {'id': courrier.id}) }}" class="btn btn-danger" 
+                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce courrier ?');" title="Supprimer">
+                            <i class="fas fa-trash-alt"></i> <!-- Icône pour supprimer -->
+                        </a>
+                        {% endif %}
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5">Aucun courrier trouvé</td>
+                    <td colspan="8">Aucun courrier trouvé</td>
                 </tr>
             {% endfor %}
-        </tbody>
-    </table>
+        {% endif %}
+    </tbody>
+</table>
 {% endblock %}

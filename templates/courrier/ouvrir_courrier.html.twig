@@ -1,8 +1,59 @@
-<h1>Courrier - {{ courrier.objet }}</h1>
+{% extends 'layout/layout.html.twig' %}
+{% block title %}Détails du Courrier{% endblock %}
 
-<p><strong>De :</strong> {{ courrier.expediteur.email }}</p>
-<p><strong>Date d'envoi :</strong> {{ courrier.dateEnvoi|date('d/m/Y') }}</p>
-<p><strong>Message :</strong> {{ courrier.message }}</p>
-<p><strong>Pièce jointe :</strong> {{ courrier.pieceJointe }}</p>
+{% block content %}
+    <h1>Détails du Courrier</h1>
 
-<p><a href="{{ path('app_mes_courriers') }}" class="btn btn-primary">Retour à mes courriers</a></p>
+    <div class="courrier-detail">
+        <p><strong>ID:</strong> {{ courrier.id }}</p>
+        <p><strong>Expéditeur:</strong> {{ courrier.expediteur.email }}</p>
+        <p><strong>Destinataire(s):</strong>
+            {% for destinataire in courrier.destinataire %}
+                {{ destinataire.email }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+        <p><strong>Objet:</strong> {{ courrier.objet }}</p>
+        <p><strong>Pièce jointe:</strong>
+            {% if courrier.pieceJointe %}
+                <a href="{{ asset('uploads/courriers/' ~ courrier.pieceJointe) }}" target="_blank" class="download-link" download="{{ courrier.pieceJointe }}">Télécharger</a>
+            {% else %}
+                Pas de pièce jointe
+            {% endif %}
+        </p>
+        <p><strong>Date d'envoi:</strong> {{ courrier.dateEnvoi ? courrier.dateEnvoi|date('d/m/Y H:i') : 'Non reçue' }}</p>
+        <p><strong>Date de réception:</strong> {{ courrier.dateReception ? courrier.dateReception|date('d/m/Y H:i') : 'Non reçue' }}</p>
+        <p><strong>Status:</strong> {{ courrier.status }}</p>
+    </div>
+
+    <a href="{{ path('app_courrier') }}" class="btn">Retour à la liste des courriers</a>
+
+    <style>
+        .download-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 5px; 
+            margin-top: 5px; 
+        }
+
+        .download-link:hover {
+            background-color: #0056b3; 
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #6c757d; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 5px; 
+            margin-top: 20px; 
+        }
+
+        .btn:hover {
+            background-color: #5a6268; 
+        }
+    </style>
+{% endblock %}
