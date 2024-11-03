@@ -22,7 +22,7 @@
   height: 30vh;
   position: relative;
   padding: 1em;
-  background: url("/images/back.jpg");
+  background: url("../images/back.jpg");
   background-size: cover;
   box-shadow: 2em 2em 0 0 red;
 }
@@ -46,7 +46,6 @@
   margin-right: 4em;
 }
 
-/*css mission*/
 @media (max-width: 780px) {
   .content {
     flex-direction: column;
