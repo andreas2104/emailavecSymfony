@@ -22,7 +22,7 @@ border-radius: 30%;
 padding: 20px; 
 text-align: center; 
 display: inline-block; "></h1>
- <h1 style="font-size:2rem; color: white; border-radius:20px">Tresor Public</h1> 
+ <h1 style="font-size:2rem; color: white; border-radius:20px; border-radius:5px; box-shadow: 20px 4px 29px rgba(25 , 0, 12, 12)">Tresor Public</h1> 
     <ul>
         {% if is_granted('ROLE_ADMIN') %}
     <li><a href="{{ path('courrier_new') }}">Nouveau Courrier</a></li>

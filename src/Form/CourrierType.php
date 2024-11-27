@@ -17,33 +17,37 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
 
 class CourrierType extends AbstractType
-{ 
-  private $security;
-  public function __construct(Security $s)
-  {
-    $this->security = $s;
-  }
+{
+    private $security;
+    public function __construct(Security $s)
+    {
+        $this->security = $s;
+    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
-    { 
-      $currentUser = $this->security->getUser();
-    //   $currentStatus = $this->security->getCurrentStatus();
+    {
+        $currentUser = $this->security->getUser();
+
+        //   $currentStatus = $this->security->getCurrentStatus();
         $builder
             ->add('date_envoi', DateType::class, [
                 'widget' => 'single_text',
                 'label' => 'Date d\'envoi',
                 'required' => true,
+                'disabled' => true,
+                // 'data' => $date
             ])
             ->add('date_reception', DateType::class, [
                 'widget' => 'single_text',
                 'label' => 'Date de réception',
                 'required' => false,
+                'disabled' => true,
             ])
             ->add('expediteur', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'email',
                 'label' => 'Expéditeur',
                 'required' => true,
-                'data' => $currentUser, 
+                'data' => $currentUser,
                 'disabled' => true,
             ])
             ->add('destinataire', EntityType::class, [
@@ -62,16 +66,17 @@ class CourrierType extends AbstractType
                 'label' => 'Expéditeur du courrier',
                 'required' => true,
             ])
-            // ->add('status', ChoiceType::class, [
-            //     'choices' => [
-            //         'En attente' => 'en_attente',
-            //         'Envoyé' => 'envoye',
-            //         'Reçu' => 'recu',
-            //         'disable' => 'true'
-            //     ],
-            //     'label' => 'Statut',
-            //     'required' => true,
-            // ])
+            ->add('status', ChoiceType::class, [
+                'choices' => [
+                    'En attente' => 'en_attente',
+                    'Envoyé' => 'envoye',
+                    'Reçu' => 'recu',
+                    'disable' => 'true'
+                ],
+                'label' => 'Statut',
+                'disabled' => true,
+                'required' => true,
+            ])
             ->add('piece_jointe', FileType::class, [
                 'label' => 'Pièce jointe (fichier, document, image, etc.)',
                 'mapped' => false,

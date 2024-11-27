@@ -49,6 +49,7 @@ class CourrierController extends AbstractController
 
         $courrier = new Courrier();
         $courrier->setExpediteur($security->getUser());
+        $courrier->setStatus('en_attente');//Definit le statut par defaut
 
         $form = $this->createForm(CourrierType::class, $courrier);
         $form->handleRequest($request);

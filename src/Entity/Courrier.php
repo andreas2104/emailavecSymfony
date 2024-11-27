@@ -50,10 +50,11 @@ class Courrier
     {
         $this->destinataire = new ArrayCollection();
         $this->date_envoi = null; // Initialise date_envoi à null
-        $this->date_envoi = new \DateTime('now'); 
+        $this->date_envoi = new \DateTime('now');
         $this->date_reception = new \DateTime('now');
+        $this->status = 'envoyer';
     }
-    
+
     // Getter et Setter pour piece_jointe
     public function getPieceJointe(): ?string
     {
@@ -164,6 +165,7 @@ class Courrier
 
     public function setStatus(string $status): static
     {
+
         $this->status = $status;
 
         return $this;

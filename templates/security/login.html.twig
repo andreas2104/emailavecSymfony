@@ -16,7 +16,10 @@
         </div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal text-center;">Merci de vous connecter</h1>
+    <h1 style="border-radius: 20px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); text-align:center">
+  Merci de vous connecter
+</h1>
+
 
 <i class="fa-solid fa-user" style="margin-left: 11.5em; border-radius: 50%; color: black; background-color: #f0f0f0; padding: 10px; border: 2px solid black;"></i>
 <div class="form-group" style="padding:12px">
@@ -31,7 +34,8 @@
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-    <button class="btn btn-lg btn-primary btn-block " style="background-color:green; margin-left:9em; margin-top:10px; margin-bottom:20px; font-size:1em;text-shadow:yellow;color:white" type="submit">Se connecter</button>
+    {# <button class="btn btn-lg btn-primary btn-block " style="background-color:green; margin-left:9em; margin-top:10px; margin-bottom:20px; font-size:1em;text-shadow:yellow;color:white" type="submit">Se connecter</button> #}
+<button class="btn btn-lg btn-primary btn-block " style="background-color:green; margin-left:9em; margin-top:10px; margin-bottom:20px; font-size:1em;box-shadow:2px 20px 9px rgb(2, 4 ,4);border-radius:5px;color:white" type="submit">Se connecter</button>
 
     <div class="mb-3">
   <a href="{{ path('registration') }}">S'inscrire</a>

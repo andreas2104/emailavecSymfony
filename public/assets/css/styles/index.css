@@ -84,7 +84,11 @@ h2 {
   font-size: 2em;
   text-align: center; 
   color: white ;
-  text-shadow: 2px 2px 5px rgba(142, 146, 119, 0.5); 
+  border-radius: 5px;
+  border: 2px solid;
+  box-shadow: 20px 5px 50px rgb(red, green, blue);
+  text-shadow: 20px 7px 50px rgba(142, 146, 119, 0.5); 
+  
 }
 
  nav h1 {

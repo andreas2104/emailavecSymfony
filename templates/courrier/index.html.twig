@@ -10,7 +10,6 @@
 <table class="custom-table">
     <thead>
         <tr>
-            <th>Id</th>
             <th>Expéditeur</th>
             <th>Destinataire(s)</th>
             <th>Objet</th>
@@ -30,7 +29,6 @@
         {% else %}
             {% for courrier in courriers %}
                 <tr>
-                    <td>{{ courrier.id }}</td>
                     <td>{{ courrier.expediteur.email }}</td>
                     <td>
                         {% for destinataire in courrier.destinataire %}
